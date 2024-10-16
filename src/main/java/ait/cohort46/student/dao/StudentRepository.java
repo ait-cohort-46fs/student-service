@@ -7,4 +7,6 @@ import java.util.stream.Stream;
 
 public interface StudentRepository extends CrudRepository<Student, Long> {
    Stream<Student>  findByNameIgnoreCase(String name);
+
+   Stream<Student> getAllBy();
 }
