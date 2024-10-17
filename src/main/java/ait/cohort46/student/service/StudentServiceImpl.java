@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Set;
-import java.util.stream.StreamSupport;
 
 @Service
 @RequiredArgsConstructor
@@ -73,15 +72,12 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Long getStudentsQuantityByNames(Set<String> names) {
-        return studentRepository.getAllBy()
-                .filter(s -> names.contains(s.getName()))
-                .count();
+        return studentRepository.countByNameInIgnoreCase(names);
     }
 
     @Override
     public List<StudentDto> findStudentsByExamMinScore(String exam, Integer minScore) {
-        return studentRepository.getAllBy()
-                .filter(s -> s.getScores().containsKey(exam) && s.getScores().get(exam) > minScore)
+        return studentRepository.findByExamAndScoreGreaterThan(exam, minScore)
                 .map(s -> new StudentDto(s.getId(), s.getName(), s.getScores()))
                 .toList();
     }
